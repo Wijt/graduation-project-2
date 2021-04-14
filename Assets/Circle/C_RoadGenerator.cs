@@ -5,7 +5,8 @@ using UnityEngine;
 public class C_RoadGenerator : MonoBehaviour
 {
 
-    int lineLength = 100;
+    public int segmenCount = 100;
+    public float segmentLength = 2;
     LineRenderer lr;
     // Start is called before the first frame update
     void Start()
@@ -15,14 +16,18 @@ public class C_RoadGenerator : MonoBehaviour
 
 
         float pY = 0;
-        for (int i = 0; i < 5; i++)
-            positions.Add(Vector3.zero);
+        float pX = 0;
+        for (int i = 0; i < 5; i++){
+            positions.Add(new Vector3(pX, 0, 0));
+            pX += segmentLength;
+        }
         
-        for (int i = 5; i < lineLength; i++)
+        for (int i = 5; i < segmenCount; i++)
         {
             Vector3 p = new Vector3();
-            p.x = i;
-            p.y = pY<1 && pY>-1 ? Random.Range(pY-0.5f, pY+0.5f) : Random.Range(-1f,1f);
+            p.x = pX;
+            pX = pX + segmentLength;
+            p.y = pY<1 && pY>-1 ? Random.Range(pY-0.75f, pY+0.75f) : Random.Range(-1f,1f);
             pY = p.y;
             p.z = 0;
             positions.Add(p);
