@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class C_Player : MonoBehaviour
 {
     public float jumpForce = 0;
     public float speed = 1;
 
+    public int point = 0;
     Rigidbody2D rb;
 
     // Start is called before the first frame update
@@ -26,5 +28,20 @@ public class C_Player : MonoBehaviour
     {
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(Vector2.up * jumpForce);
+
+        point++;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.name.Contains("Road"))
+        {
+            Death();
+        }
+    }
+
+    public void Death()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
