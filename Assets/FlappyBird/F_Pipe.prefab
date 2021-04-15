@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 2130033866373555040}
   - component: {fileID: 4400023022961822117}
   m_Layer: 0
-  m_Name: Pipe
+  m_Name: F_Pipe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
