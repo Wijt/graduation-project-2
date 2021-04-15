@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class D_Player : MonoBehaviour
@@ -10,6 +11,8 @@ public class D_Player : MonoBehaviour
     bool alreadyJump = false;
 
     public Slider slider;
+
+    public int point = 0;
 
 
     // Start is called before the first frame update
@@ -39,10 +42,27 @@ public class D_Player : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name.Contains("Death"))
+        {
+            Death();
+        }
+    }
+
+    public void Death()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     // Update is called once per frame
     void Update()
     {
         transform.position = new Vector3(ReMap(slider.value, 0, 1, -2.3f, 2.3f), transform.position.y, 0);
+        if (Camera.main.transform.position.y<transform.position.y)
+        {
+            point += 1;
+        }
     }
 
     public float ReMap(float value, float from1, float to1, float from2, float to2)
