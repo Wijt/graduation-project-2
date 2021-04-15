@@ -7,7 +7,7 @@ public class D_PlatformSpawner : MonoBehaviour
     public GameObject platform;
 
     public int platformCount = 100;
-    public float hight;
+    public float height;
 
     // Start is called before the first frame update
     void Start()
@@ -15,7 +15,7 @@ public class D_PlatformSpawner : MonoBehaviour
         for (int i = 0; i < platformCount; i++)
         {
             GameObject p = Instantiate(platform, this.transform);
-            p.transform.localPosition = Vector3.right * Random.Range(-2f, +2f) + Vector3.up * i + Vector3.up * Mathf.Min(2f, (hight - Random.Range(-1f, 1f)));
+            p.transform.localPosition = Vector3.right * Random.Range(-2f, +2f) + Vector3.up * i + Vector3.up * Mathf.Min(2f, (height - Random.Range(-1f, 1f)));
         } 
     }
 
