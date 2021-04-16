@@ -58,7 +58,8 @@ public class D_Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(ReMap(slider.value, 0, 1, -2.3f, 2.3f), transform.position.y, 0);
+        Vector3 newPos = Vector3.Lerp(transform.position, new Vector3(ReMap(slider.value, 0, 1, -2.3f, 2.3f), transform.position.y, 0), Time.deltaTime * 10f);
+        this.transform.position = newPos;
         if (Camera.main.transform.position.y<transform.position.y)
         {
             point += 1;

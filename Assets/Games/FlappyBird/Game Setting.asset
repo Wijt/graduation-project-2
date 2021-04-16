@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   birdJumpForce: 200
   spaceBetweenPipes: 4
-  gapBetweenPipe: 1.5
+  gapBetweenPipe: 2
   gameSpeed: 1
