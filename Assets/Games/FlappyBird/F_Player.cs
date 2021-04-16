@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 public class F_Player : MonoBehaviour
 {
     public int point=0;
-    public float jumpForce;
+    private float jumpForce;
     Rigidbody2D rb;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void Start()
+    {
+        jumpForce = F_SettingController.setting.birdJumpForce;
     }
 
     public void Jump()

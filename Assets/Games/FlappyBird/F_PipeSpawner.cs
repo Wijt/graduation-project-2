@@ -7,11 +7,12 @@ public class F_PipeSpawner : MonoBehaviour
     public List<GameObject> pipes = new List<GameObject>();
     public GameObject pipe;
     public Vector3 spawnPos;
-    public float spaceBetweenPipes = 3;
+    private float spaceBetweenPipes = 3;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
+        spaceBetweenPipes = F_SettingController.setting.spaceBetweenPipes;
         for (int i = 0; i < 3; i++)
             SpawnPipe();
     }
