@@ -35,7 +35,7 @@ public class F_Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name.Contains("Pipe"))
+        if (collision.gameObject.name.Contains("Pipe") || collision.gameObject.name.Contains("Death"))
         {
             Death();
         }
