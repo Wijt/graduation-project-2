@@ -19,6 +19,10 @@ public class F_Player : MonoBehaviour
         jumpForce = F_SettingController.setting.birdJumpForce;
     }
 
+    private void Update()
+    {
+        transform.rotation = Quaternion.Euler(Vector3.forward * ReMap(rb.velocity.y, +8, -8, 75, -90));
+    }
     public void Jump()
     {
         rb.velocity = Vector2.zero;
@@ -44,5 +48,10 @@ public class F_Player : MonoBehaviour
     public void Death()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);       
+    }
+
+    public float ReMap(float value, float from1, float to1, float from2, float to2)
+    {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 }
