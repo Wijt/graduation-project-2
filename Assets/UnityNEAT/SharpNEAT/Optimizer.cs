@@ -11,10 +11,10 @@ using System.IO;
 public class Optimizer : MonoBehaviour {
 
     //set the number of inputs we are going to use in this Neural Net
-    const int NUM_INPUTS = 3;
+    protected int NUM_INPUTS = 3;
 
     //set the number of outputs we plan to use
-    const int NUM_OUTPUTS = 5;
+    protected int NUM_OUTPUTS = 5;
 
     public int Trials;//number of trials for each generation
     public float TrialDuration;//how long a trial lasts
@@ -36,31 +36,29 @@ public class Optimizer : MonoBehaviour {
     SimpleExperiment experiment;
     static NeatEvolutionAlgorithm<NeatGenome> _ea;
 
-    public GameObject Target;//the target we want our bobbers chasing
     public GameObject Unit;//the smart object
-    public float distaceTargetAllowed = 1;//the closest we can get to target until we stop travelling towards it
     public bool doTrain = true;//toggle the start and stop training buttons
     public bool canThrottleFPS = false;//toggle whether or not the system can adjust the FPS to get more than the fpsMin frames at a lower timescale
     public float fpsMin = 10;//set the number of minimum frames per second allowed before throttling
     public bool showDebugger = false;//toggle debug logger
     public float timeScale;//used for setting or monitoring the current timescale
-    public string trainedObjectName = "bob";//name of file to use / create
+    public string trainedObjectID = "bob";//name of file to use / create
 
 
     // Use this for initialization
-    void Start () {
+     void Start () {
         accum = 0;
         Utility.DebugLog = showDebugger;
         experiment = new SimpleExperiment();
         XmlDocument xmlConfig = new XmlDocument();
-        TextAsset textAsset = (TextAsset)Resources.Load("experiment.config");
+        TextAsset textAsset = (TextAsset)Resources.Load(trainedObjectID+"_experiment.config");
         xmlConfig.LoadXml(textAsset.text);
         experiment.SetOptimizer(this);
 
-        experiment.Initialize(trainedObjectName + " Experiment", xmlConfig.DocumentElement, NUM_INPUTS, NUM_OUTPUTS);
+        experiment.Initialize(trainedObjectID + " Experiment", xmlConfig.DocumentElement, NUM_INPUTS, NUM_OUTPUTS);
 
-        champFileSavePath  = string.Format("{0}/{1}.champ", "AIAgents", trainedObjectName);
-        popFileSavePath    = string.Format("{0}/{1}.pop", "IAgents", trainedObjectName);
+        champFileSavePath = Application.persistentDataPath + string.Format("/{0}.champ.xml", trainedObjectID);
+        popFileSavePath = Application.persistentDataPath + string.Format("/{0}.pop.xml", trainedObjectID);
 
         if (Utility.DebugLog)
         {
@@ -69,9 +67,9 @@ public class Optimizer : MonoBehaviour {
 	}
 
     // Update is called once per frame
-    void Update()
-    {
-
+    void Update() 
+    { 
+    
         Utility.DebugLog = showDebugger;
 
         if (Time.timeScale != timeScale)
@@ -123,8 +121,7 @@ public class Optimizer : MonoBehaviour {
 
     public void StartEA()
     {
-        //update the location of the Target
-        Target.transform.position = new Vector3(UnityEngine.Random.Range(-distaceTargetAllowed, distaceTargetAllowed), Target.transform.position.y, UnityEngine.Random.Range(-distaceTargetAllowed, distaceTargetAllowed));
+        Restart();
         if (Utility.DebugLog)
         {
             Utility.Log("Starting PhotoTaxis experiment");
@@ -149,8 +146,7 @@ public class Optimizer : MonoBehaviour {
 
     void ea_UpdateEvent(object sender, EventArgs e)
     {
-        //update the location of the Target
-        Target.transform.position = new Vector3(UnityEngine.Random.Range(-distaceTargetAllowed, distaceTargetAllowed), Target.transform.position.y, UnityEngine.Random.Range(-distaceTargetAllowed, distaceTargetAllowed));
+        Restart();
         if (Utility.DebugLog)
         {
             Utility.Log(string.Format("gen={0:N0} bestFitness={1:N6}",
@@ -208,7 +204,7 @@ public class Optimizer : MonoBehaviour {
         XmlWriterSettings _xwSettings = new XmlWriterSettings();
         _xwSettings.Indent = true;
         // Save genomes to xml file.        
-        DirectoryInfo dirInf = new DirectoryInfo(Application.dataPath);
+        DirectoryInfo dirInf = new DirectoryInfo(Application.persistentDataPath);
         if (!dirInf.Exists)
         {
             if (Utility.DebugLog)
@@ -217,13 +213,13 @@ public class Optimizer : MonoBehaviour {
             }
             dirInf.Create();
         }
-        using (XmlWriter xw = XmlWriter.Create(popFileSavePath + ".xml", _xwSettings))
+        using (XmlWriter xw = XmlWriter.Create(popFileSavePath, _xwSettings))
         {
             experiment.SavePopulation(xw, _ea.GenomeList);
         }
         // Also save the best genome
 
-        using (XmlWriter xw = XmlWriter.Create(champFileSavePath + ".xml", _xwSettings))
+        using (XmlWriter xw = XmlWriter.Create(champFileSavePath, _xwSettings))
         {
             experiment.SavePopulation(xw, new NeatGenome[] { _ea.CurrentChampGenome });
         }
@@ -231,7 +227,7 @@ public class Optimizer : MonoBehaviour {
 
     public void Evaluate(IBlackBox box)
     {
-        GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
+        GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation, this.transform) as GameObject;
         UnitController controller = obj.GetComponent<UnitController>();
 
         ControllerMap.Add(box, controller);
@@ -254,16 +250,23 @@ public class Optimizer : MonoBehaviour {
 
 
         // Try to load the genome from the XML document.
+        //try
+        //{
+        //    TextAsset popTxtAsset = (TextAsset)Resources.Load(champFileSavePath);
+        //    string stream = popTxtAsset.text;
+
+        //    string xrString = stream;
+        //    XmlDocument xdoc = new XmlDocument();
+        //    xdoc.LoadXml(xrString);
+
+        //    using (XmlReader xr = new XmlNodeReader(xdoc))
+        //        genome = NeatGenomeXmlIO.ReadCompleteGenomeList(xr, false, (NeatGenomeFactory)experiment.CreateGenomeFactory())[0];
+
+
+        //}
         try
         {
-            TextAsset popTxtAsset = (TextAsset)Resources.Load(champFileSavePath);
-            string stream = popTxtAsset.text;
-
-            string xrString = stream;
-            XmlDocument xdoc = new XmlDocument();
-            xdoc.LoadXml(xrString);
-
-            using (XmlReader xr = new XmlNodeReader(xdoc))
+            using (XmlReader xr = XmlReader.Create(champFileSavePath))
                 genome = NeatGenomeXmlIO.ReadCompleteGenomeList(xr, false, (NeatGenomeFactory)experiment.CreateGenomeFactory())[0];
 
 
@@ -279,8 +282,8 @@ public class Optimizer : MonoBehaviour {
 
         // Decode the genome into a phenome (neural network).
         var phenome = genomeDecoder.Decode(genome);
-
-        GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation) as GameObject;
+        Restart();
+        GameObject obj = Instantiate(Unit, Unit.transform.position, Unit.transform.rotation, this.transform) as GameObject;
         UnitController controller = obj.GetComponent<UnitController>();
 
         ControllerMap.Add(phenome, controller);
@@ -290,8 +293,6 @@ public class Optimizer : MonoBehaviour {
 
     public float GetFitness(IBlackBox box)
     {
-        //update the location of the Target
-        Target.transform.position = new Vector3(UnityEngine.Random.Range(-distaceTargetAllowed, distaceTargetAllowed), Target.transform.position.y, UnityEngine.Random.Range(-distaceTargetAllowed, distaceTargetAllowed));
         if (ControllerMap.ContainsKey(box))
         {
             return ControllerMap[box].GetFitness();
@@ -319,5 +320,13 @@ public class Optimizer : MonoBehaviour {
         }
 
         GUI.Button(new Rect(10, Screen.height - 70, 125, 60), string.Format("Generation: {0}\nFitness: {1:0.00}", Generation, Fitness));
+    }
+
+    public virtual void Restart()
+    {
+        if (showDebugger)
+        {
+            Debug.Log("Restarted");
+        }
     }
 }
