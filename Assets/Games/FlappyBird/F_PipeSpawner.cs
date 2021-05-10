@@ -13,7 +13,19 @@ public class F_PipeSpawner : MonoBehaviour
     void Start()
     {
         spaceBetweenPipes = F_SettingController.setting.spaceBetweenPipes;
-        for (int i = 0; i < 3; i++)
+        SpawnMultiplePipe(3);
+    }
+
+    public void SpawnMultiplePipe(int pipeCount)
+    {
+        if (pipes.Count > 0) {
+            foreach (GameObject p in pipes)
+            {
+                Destroy(p);
+            }
+            pipes.Clear();
+        }
+        for (int i = 0; i < pipeCount; i++)
             SpawnPipe();
     }
 
