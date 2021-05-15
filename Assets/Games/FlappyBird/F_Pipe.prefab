@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2130033866070531159}
   - component: {fileID: 2130033866070531156}
   - component: {fileID: 2130033866070531158}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pipe Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,8 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ae1ba044f50b14682eaba9456502ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gap: 1.5
-  speed: 1
   UpPipe: {fileID: 2130033866630140719}
   DownPipe: {fileID: 2130033866070531157}
 --- !u!61 &2130033866373555040
@@ -173,7 +171,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.21871719, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -184,7 +182,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.35490972, y: 12.798971}
+  m_Size: {x: 0.25852585, y: 23.924665}
   m_EdgeRadius: 0
 --- !u!50 &4400023022961822117
 Rigidbody2D:
@@ -218,7 +216,7 @@ GameObject:
   - component: {fileID: 2130033866630140753}
   - component: {fileID: 2130033866630140718}
   - component: {fileID: 2130033866630140752}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pipe Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
