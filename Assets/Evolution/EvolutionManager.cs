@@ -32,6 +32,19 @@ public class EvolutionManager : MonoBehaviour
         }
     }
 
+    public void LeaveBest()
+    {
+        shouldReset = true;
+        SmartObject fittestObject = GetFittestObject();
+        foreach (Transform item in spawnPoint)
+        {
+            if (item.gameObject != fittestObject.gameObject)
+            {
+                item.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public List<SmartObject> GetPopulation(bool isDeath)
     {
         return population.FindAll(e => e.isActive != isDeath);
@@ -65,7 +78,16 @@ public class EvolutionManager : MonoBehaviour
 
         population.Sort((a, b) => a.fitness.CompareTo(b.fitness));
         
-        //Debug.Log("Best: " + population[0].fitness + ", Worst:" + population[population.Count - 1].fitness);
+        //Debug.Log("Best: " +population[population.Count - 1].fitness  + ", Worst:" +population[0].fitness );
         return population[population.Count - 1].brain;
+    }
+    public SmartObject GetFittestObject()
+    {
+        if (population.Count == 0) return null;
+
+        population.Sort((a, b) => a.fitness.CompareTo(b.fitness));
+
+        //Debug.Log("Best: " + population[population.Count - 1].fitness + ", Worst:" + population[0].fitness);
+        return population[population.Count - 1];
     }
 }
