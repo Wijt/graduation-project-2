@@ -445,9 +445,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 1921481246}
   smartObject: {fileID: 4577580701433503685, guid: 93f3e861370ef194e89a1b80bf011a55, type: 3}
-  networkSize: 060000000300000001000000
+  networkSize: 06000000050000000300000001000000
   population: []
-  populationSize: 600
+  totalPopulationSize: 100
+  newBornRatio: 20
   ResetFunctions:
     m_PersistentCalls:
       m_Calls:
@@ -463,6 +464,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  LeaveBestFunctions:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1929976071}
+        m_TargetAssemblyTypeName: F_PipeSpawner, Assembly-CSharp
+        m_MethodName: SpawnMultiplePipe
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  debug: 0
 --- !u!4 &504632414
 Transform:
   m_ObjectHideFlags: 0

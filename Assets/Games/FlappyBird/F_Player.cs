@@ -61,7 +61,7 @@ public class F_Player : SmartObject
             Jump();
         }
 
-        fitness += 1;
+        fitness += 10;
 
         transform.rotation = Quaternion.Euler(Vector3.forward * Utils.ReMap(rb.velocity.y, +8, -8, 75, -90));
     }
@@ -93,5 +93,6 @@ public class F_Player : SmartObject
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         isActive = false;
+        this.GetComponent<SpriteRenderer>().enabled = false;
     }    
 }
