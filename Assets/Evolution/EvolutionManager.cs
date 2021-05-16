@@ -12,11 +12,16 @@ public class EvolutionManager : MonoBehaviour
     [SerializeField]
     public List<SmartObject> population;
 
-    public int populationSize;
+    public int totalPopulationSize;
+    [Range(0, 100)]
+    public int newBornRatio;
 
     public UnityEvent ResetFunctions;
+    public UnityEvent LeaveBestFunctions;
 
     bool shouldReset = false;
+
+    public bool debug;
 
     private void Start()
     {
@@ -25,9 +30,13 @@ public class EvolutionManager : MonoBehaviour
 
     private void Update()
     {
-        if (GetPopulation(true).Count == populationSize && !shouldReset)
+        if (GetPopulation(true).Count == totalPopulationSize && !shouldReset)
         {
             shouldReset = true;
+            if (debug)
+            {
+                Debug.Log("Best Fitness: " + GetFittestObject().fitness);
+            }
             CreatePopulation(GetFittestObjectBrain());
         }
     }
@@ -43,29 +52,36 @@ public class EvolutionManager : MonoBehaviour
                 item.gameObject.SetActive(false);
             }
         }
+        LeaveBestFunctions.Invoke();
     }
 
-    public List<SmartObject> GetPopulation(bool isDeath)
+public List<SmartObject> GetPopulation(bool isDeath)
     {
         return population.FindAll(e => e.isActive != isDeath);
     }
 
     public void CreatePopulation(NeuralNetwork brain)
-    {
+    { 
         population.Clear();
         foreach (Transform child in spawnPoint)
         {
             Destroy(child.gameObject);
         }
-        for (int i = 0; i < populationSize; i++)
+        for (int i = 0; i < totalPopulationSize; i++)
         {
             GameObject spanwedObject = Instantiate(smartObject, spawnPoint);
             SmartObject spawnedObjectScript = spanwedObject.GetComponent<SmartObject>();
-            
-            spawnedObjectScript.brain = brain != null ? brain.Copy() : new NeuralNetwork(networkSize);
+
+            if (brain == null || i < totalPopulationSize * (newBornRatio * 0.01))
+            {
+                spawnedObjectScript.brain = new NeuralNetwork(networkSize);
+            }
+            else
+            {
+                spawnedObjectScript.brain = brain.Copy();
+            }
 
             spawnedObjectScript.brain.Mutate();
-
             population.Add(spawnedObjectScript);
         }
         ResetFunctions.Invoke();

@@ -63,7 +63,7 @@ public class F_Player : SmartObject
 
         fitness += 1;
 
-        transform.rotation = Quaternion.Euler(Vector3.forward * ReMap(rb.velocity.y, +8, -8, 75, -90));
+        transform.rotation = Quaternion.Euler(Vector3.forward * Utils.ReMap(rb.velocity.y, +8, -8, 75, -90));
     }
     public void Jump()
     {
@@ -93,10 +93,5 @@ public class F_Player : SmartObject
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         isActive = false;
-    }
-
-    public float ReMap(float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
-    }
+    }    
 }
