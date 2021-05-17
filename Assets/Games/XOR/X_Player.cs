@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class X_Player : SmartObject
 {
-    public int maksThinkCount = 100;
+    public int maxThinkCount = 100;
 
     int[,] truthTable;
 
@@ -25,7 +25,7 @@ public class X_Player : SmartObject
         };
         isActive = true;
         fitness = 0;
-        for (int i = 0; i < maksThinkCount; i++)
+        for (int i = 0; i < maxThinkCount; i++)
         {
             int truthRowID = Random.Range(0, truthTable.GetLength(0));
             float[] inputs = new float[2];
