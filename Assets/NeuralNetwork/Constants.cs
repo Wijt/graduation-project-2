@@ -15,4 +15,11 @@ public static class Constants
     {
         return x >= 0 ? 1 : -1;
     }
+
+    public static float Sigmoid(float x)
+    {
+        if (x < -45.0) return 0.0f;
+        else if (x > 45.0) return 1.0f;
+        else return 1.0f / (1.0f + Mathf.Exp(-x));
+    }
 }

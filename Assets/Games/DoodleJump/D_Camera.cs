@@ -21,7 +21,6 @@ public class D_Camera : MonoBehaviour
         {
             Vector3 newPos = Vector3.Lerp(transform.position, new Vector3(transform.position.x, target.position.y + offset.y, transform.position.z), Time.deltaTime * 1f);
             this.transform.position = newPos;
-
         }
 
     }
