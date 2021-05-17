@@ -26,6 +26,8 @@ public class D_Player : SmartObject
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (!isActive) return;
+        
         if (collision.gameObject.name.Contains("Platform"))
         {
             if (!alreadyJump)
@@ -39,6 +41,8 @@ public class D_Player : SmartObject
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if (!isActive) return;
+
         if (collision.gameObject.name.Contains("Platform"))
         {
             alreadyJump = false;

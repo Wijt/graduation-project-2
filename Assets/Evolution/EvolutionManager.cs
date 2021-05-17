@@ -16,6 +16,8 @@ public class EvolutionManager : MonoBehaviour
     [Range(0, 100)]
     public int newBornRatio;
 
+    public SmartObject bestObject;
+
     public UnityEvent ResetFunctions;
     public UnityEvent LeaveBestFunctions;
 
@@ -26,6 +28,7 @@ public class EvolutionManager : MonoBehaviour
     private void Start()
     {
         CreatePopulation(null);
+        ResetFunctions.AddListener(CheckFittestandTempSave);
     }
 
     private void Update()
@@ -55,7 +58,7 @@ public class EvolutionManager : MonoBehaviour
         LeaveBestFunctions.Invoke();
     }
 
-public List<SmartObject> GetPopulation(bool isDeath)
+    public List<SmartObject> GetPopulation(bool isDeath)
     {
         return population.FindAll(e => e.isActive != isDeath);
     }
@@ -105,5 +108,23 @@ public List<SmartObject> GetPopulation(bool isDeath)
 
         //Debug.Log("Best: " + population[population.Count - 1].fitness + ", Worst:" + population[0].fitness);
         return population[population.Count - 1];
+    }
+    
+    public void CheckFittestandTempSave()
+    {
+        SmartObject fittest = GetFittestObject();
+        if (bestObject==null)
+        {
+            newFittest.brain = fittest.brain.Copy();
+            newFittest.fitness = fittest.fitness;
+            bestObject = newFittest;
+            return;
+        }
+
+        if (bestObject.fitness < fittest.fitness)
+        {
+            newFittest.brain = fittest.brain.Copy();
+            newFittest.fitness = fittest.fitness;
+        }
     }
 }
