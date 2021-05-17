@@ -8,33 +8,43 @@ public class C_RoadGenerator : MonoBehaviour
     public int segmenCount = 100;
     public float segmentLength = 2;
     LineRenderer lr;
+    private void Awake()
+    {
+        lr = transform.GetComponent<LineRenderer>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        lr = transform.GetComponent<LineRenderer>();
+        CreateRoad();
+    }
+
+    public void CreateRoad()
+    {
         List<Vector3> positions = new List<Vector3>();
 
 
         float pY = 0;
         float pX = 0;
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++)
+        {
             positions.Add(new Vector3(pX, 0, 0));
             pX += segmentLength;
         }
-        
+
         for (int i = 5; i < segmenCount; i++)
         {
             Vector3 p = new Vector3();
             p.x = pX;
             pX = pX + segmentLength;
-            p.y = pY<1 && pY>-1 ? Random.Range(pY-0.75f, pY+0.75f) : Random.Range(-1f,1f);
+            p.y = pY < 1 && pY > -1 ? Random.Range(pY - 0.75f, pY + 0.75f) : Random.Range(-1f, 1f);
             pY = p.y;
             p.z = 0;
             positions.Add(p);
         }
-        lr.positionCount=positions.Count;
+        lr.positionCount = positions.Count;
         lr.SetPositions(positions.ToArray());
-       
+
         GetComponent<EdgeCollider2D>().points = ConvertArray(positions.ToArray());
     }
 
