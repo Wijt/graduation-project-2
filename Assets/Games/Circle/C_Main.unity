@@ -445,12 +445,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7849724ce02ebbc40ba9e2eda5281a8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: Circle
   spawnPoint: {fileID: 1384174038}
   smartObject: {fileID: 4811864946574191020, guid: 8fe15639712dbf14cb3efcad22356d5f, type: 3}
   networkSize: 05000000050000000500000001000000
   population: []
   totalPopulationSize: 350
   newBornRatio: 20
+  bestObject: {fileID: 0}
   ResetFunctions:
     m_PersistentCalls:
       m_Calls:
