@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class EvolutionManager : MonoBehaviour
 {
+    public string id;
     public Transform spawnPoint;
     public GameObject smartObject;
     public int[] networkSize;
@@ -12,11 +13,11 @@ public class EvolutionManager : MonoBehaviour
     [SerializeField]
     public List<SmartObject> population;
 
-    public int totalPopulationSize;
+    public int totalPopulationSize; 
     [Range(0, 100)]
     public int newBornRatio;
 
-    public SmartObject bestObject;
+    public GameObject bestObject;
 
     public UnityEvent ResetFunctions;
     public UnityEvent LeaveBestFunctions;
@@ -25,10 +26,18 @@ public class EvolutionManager : MonoBehaviour
 
     public bool debug;
 
+    string dataPath;
+
     private void Start()
     {
+        dataPath = Application.dataPath + "\\Brains\\" + id + "_best.json";
         CreatePopulation(null);
-        ResetFunctions.AddListener(CheckFittestandTempSave);
+        /*NeuralNetwork loadedNN = Utils.LoadNeueralNetwork(dataPath);
+        if (loadedNN!=null)
+        { 
+            bestObject.GetComponent<SmartObject>().brain = Utils.LoadNeueralNetwork(dataPath);
+        }
+        ResetFunctions.AddListener(CheckFittestandTempSave);*/
     }
 
     private void Update()
@@ -109,22 +118,28 @@ public class EvolutionManager : MonoBehaviour
         //Debug.Log("Best: " + population[population.Count - 1].fitness + ", Worst:" + population[0].fitness);
         return population[population.Count - 1];
     }
-    
+
+    public GameObject GetFittestGameObject()
+    {
+        if (population.Count == 0) return null;
+
+        population.Sort((a, b) => a.fitness.CompareTo(b.fitness));
+
+        //Debug.Log("Best: " + population[population.Count - 1].fitness + ", Worst:" + population[0].fitness);
+        return population[population.Count - 1].gameObject;
+    }
+
     public void CheckFittestandTempSave()
     {
-        SmartObject fittest = GetFittestObject();
-        if (bestObject==null)
+        GameObject fittest = GetFittestGameObject();
+        SmartObject fittestScript = fittest.GetComponent<SmartObject>();
+        population.Remove(fittestScript);
+
+        if (bestObject == null || bestObject.GetComponent<SmartObject>().fitness < fittestScript.fitness)
         {
-            newFittest.brain = fittest.brain.Copy();
-            newFittest.fitness = fittest.fitness;
-            bestObject = newFittest;
-            return;
+            bestObject = fittest;
+            Utils.SaveNeuralNetwork(fittestScript.brain, dataPath);
         }
 
-        if (bestObject.fitness < fittest.fitness)
-        {
-            newFittest.brain = fittest.brain.Copy();
-            newFittest.fitness = fittest.fitness;
-        }
     }
 }
