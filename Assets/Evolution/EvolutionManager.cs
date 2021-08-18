@@ -138,7 +138,7 @@ public class EvolutionManager : MonoBehaviour
         if (bestObject == null || bestObject.GetComponent<SmartObject>().fitness < fittestScript.fitness)
         {
             bestObject = fittest;
-            Utils.SaveNeuralNetwork(fittestScript.brain, dataPath);
+            //Utils.SaveNeuralNetwork(fittestScript.brain, dataPath);
         }
 
     }
